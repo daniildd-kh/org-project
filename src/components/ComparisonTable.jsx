@@ -1,4 +1,4 @@
-export function ComparisonTable({ columns, rows, note }) {
+export function ComparisonTable({ columns = [], rows = [], note }) {
   return (
     <div className="table-wrap">
       <table>

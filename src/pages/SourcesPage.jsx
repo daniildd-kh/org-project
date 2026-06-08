@@ -1,28 +1,54 @@
+import { useState } from 'react'
+import { SourceFilters } from '../components/SourceFilters.jsx'
 import { SourceList } from '../components/SourceList.jsx'
 import { sourceCategories, sources } from '../data/sources.js'
 
 export function SourcesPage() {
+  const [activeCategory, setActiveCategory] = useState('all')
+  const categoryEntries =
+    activeCategory === 'all'
+      ? Object.entries(sourceCategories)
+      : [[activeCategory, sourceCategories[activeCategory]]]
+
   return (
     <section className="page-section">
       <div className="page-heading">
         <span className="eyebrow">Источники</span>
-        <h1>Проверяемость как часть проекта</h1>
+        <h1>Источники и проверяемость данных</h1>
         <p>
-          В списке отдельно отмечены материалы, где в приложенных файлах не было полной ссылки или
-          встречались технические подписи вместо оформленного источника.
+          В этом разделе собраны официальные документы, статистические сборники, международные
+          базы данных, нормативные акты, научные статьи и информационные материалы, на которые
+          опирается сайт. Источники распределены по категориям, чтобы было понятно, откуда взяты
+          показатели и выводы по каждому направлению проекта.
         </p>
       </div>
 
-      {Object.entries(sourceCategories).map(([category, title]) => {
+      <SourceFilters
+        categories={sourceCategories}
+        activeCategory={activeCategory}
+        sources={sources}
+        onChange={setActiveCategory}
+      />
+
+      {categoryEntries.map(([category, title]) => {
         const categorySources = sources.filter((source) => source.category === category)
+
+        if (!categorySources.length && activeCategory === 'all') {
+          return null
+        }
 
         return (
           <section className="content-section source-category" key={category}>
             <div className="section-heading">
-              <span className="eyebrow">{categorySources.length} поз.</span>
+              <span className="eyebrow">Источников: {categorySources.length}</span>
               <h2>{title}</h2>
             </div>
-            <SourceList sources={categorySources} />
+
+            {categorySources.length ? (
+              <SourceList sources={categorySources} />
+            ) : (
+              <div className="empty-state">Источники в этой категории пока не добавлены</div>
+            )}
           </section>
         )
       })}

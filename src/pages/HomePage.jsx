@@ -1,6 +1,7 @@
 import { Hero } from '../components/Hero.jsx'
 import { MethodBlock } from '../components/MethodBlock.jsx'
 import { ProblemBlock } from '../components/ProblemBlock.jsx'
+import { QuizBlock } from '../components/QuizBlock.jsx'
 import { SectionCard } from '../components/SectionCard.jsx'
 import { StatCard } from '../components/StatCard.jsx'
 import { Icon } from '../components/Icon.jsx'
@@ -43,6 +44,8 @@ export function HomePage() {
           ))}
         </div>
       </section>
+
+      <QuizBlock />
 
       <section className="content-section stats-section">
         <div className="stats-panel">

@@ -8,6 +8,13 @@ const cardNumbers = {
   emergency: '04',
 }
 
+const cardIcons = {
+  oncology: 'hospital',
+  innovation: 'microscope',
+  cardio: 'heart',
+  emergency: 'stethoscope',
+}
+
 export function SectionCard({ section }) {
   return (
     <a className={`section-card accent-${section.accent}`} href={`#/sections/${section.id}`}>
@@ -21,9 +28,13 @@ export function SectionCard({ section }) {
       <div className="section-card-body">
         <div className="section-card-media">
           <ImageSlot image={section.image} variant="card" />
-          <span className="section-icon">{section.shortTitle.slice(0, 1)}</span>
         </div>
-        <h3>{section.title}</h3>
+        <div className="section-card-title">
+          <span className="section-icon">
+            <Icon name={cardIcons[section.id] ?? 'checkCircle'} size={24} />
+          </span>
+          <h3>{section.title}</h3>
+        </div>
         <p>{section.lead}</p>
       </div>
       <div className="section-card-foot">

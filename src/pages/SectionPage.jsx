@@ -1,12 +1,19 @@
 import { ComparisonTable } from '../components/ComparisonTable.jsx'
 import { Icon } from '../components/Icon.jsx'
 import { ImageSlot } from '../components/ImageSlot.jsx'
+import { MeaningAccordion } from '../components/MeaningAccordion.jsx'
 import { SourceList } from '../components/SourceList.jsx'
 import { StatCard } from '../components/StatCard.jsx'
 import { getSourcesByIds } from '../data/sources.js'
 
 export function SectionPage({ section }) {
   const sectionSources = getSourcesByIds(section.sourceIds)
+  const measures = section.measures ?? []
+  const stats = section.stats ?? []
+  const indicators = section.indicators ?? []
+  const meaning = section.meaning ?? []
+  const comparison = section.comparison ?? { columns: [], rows: [] }
+  const hasComparison = Boolean(comparison.columns?.length && comparison.rows?.length)
 
   return (
     <section className="page-section">
@@ -27,36 +34,43 @@ export function SectionPage({ section }) {
         <ImageSlot image={section.image} variant="wide" />
       </section>
 
-      <section className="content-section">
-        <div className="section-heading">
-          <span className="eyebrow">Что сделали в России</span>
-          <h2>Меры и проекты</h2>
-        </div>
-        <div className="measure-grid">
-          {section.measures.map((measure) => (
-            <article key={measure}>
-              <span />
-              <p>{measure}</p>
-            </article>
-          ))}
-        </div>
-      </section>
+      {measures.length ? (
+        <section className="content-section">
+          <div className="section-heading">
+            <span className="eyebrow">Что сделали в России</span>
+            <h2>Меры и проекты</h2>
+          </div>
+          <div className="measure-grid">
+            {measures.map((measure) => (
+              <article key={measure}>
+                <span />
+                <p>{measure}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+      ) : null}
 
       <section className="content-section">
         <div className="section-heading">
           <span className="eyebrow">Показатели</span>
           <h2>Цифры из материалов</h2>
         </div>
-        <div className="stats-grid compact">
-          {section.stats.map((stat) => (
-            <StatCard stat={stat} key={`${stat.value}-${stat.label}`} />
-          ))}
-        </div>
-        <ComparisonTable
-          columns={['Показатель', 'Было', 'Стало / цель']}
-          rows={section.indicators}
-          note="Если в материалах не было базового значения или полной ссылки, это явно отмечено."
-        />
+        {stats.length ? (
+          <div className="stats-grid compact">
+            {stats.map((stat) => (
+              <StatCard stat={stat} key={`${stat.value}-${stat.label}`} />
+            ))}
+          </div>
+        ) : (
+          <div className="empty-state">Показатели для этого раздела пока не добавлены</div>
+        )}
+        {indicators.length ? (
+          <ComparisonTable
+            columns={['Показатель', 'Было', 'Стало / цель']}
+            rows={indicators}
+          />
+        ) : null}
       </section>
 
       <section className="content-section meaning-section">
@@ -64,20 +78,18 @@ export function SectionPage({ section }) {
           <span className="eyebrow">Что это значит для человека</span>
           <h2>Практический смысл</h2>
         </div>
-        <div className="meaning-list">
-          {section.meaning.map((item) => (
-            <p key={item}>{item}</p>
-          ))}
-        </div>
+        <MeaningAccordion items={meaning} />
       </section>
 
-      <section className="content-section">
-        <div className="section-heading">
-          <span className="eyebrow">Сравнение</span>
-          <h2>Россия и другие страны</h2>
-        </div>
-        <ComparisonTable {...section.comparison} />
-      </section>
+      {hasComparison ? (
+        <section className="content-section">
+          <div className="section-heading">
+            <span className="eyebrow">Сравнение</span>
+            <h2>Россия и другие страны</h2>
+          </div>
+          <ComparisonTable {...comparison} />
+        </section>
+      ) : null}
 
       <section className={`content-section conclusion accent-${section.accent}`}>
         <span className="eyebrow">Вывод</span>
