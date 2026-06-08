@@ -35,15 +35,18 @@ npm run preview
 В `vite.config.js` задан base:
 
 ```js
-base: process.env.NODE_ENV === 'production' ? '/org-project/' : '/'
+base: process.env.VITE_BASE_PATH ?? '/'
 ```
 
-Если репозиторий на GitHub будет называться иначе, замените `/org-project/` на `/<repo-name>/`.
+Если сайт публикуется в GitHub Pages из репозитория проекта, передайте путь репозитория при сборке:
+
+```bash
+VITE_BASE_PATH=/medical-navigator/ npm run build
+```
 
 После этого:
 
 ```bash
-npm run build
 npm run deploy
 ```
 
