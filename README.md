@@ -32,25 +32,21 @@ npm run preview
 
 ## Деплой на GitHub Pages
 
-В `vite.config.js` задан base:
+В `vite.config.js` для production задан относительный base:
 
 ```js
-base: process.env.VITE_BASE_PATH ?? '/'
+base: './'
 ```
 
-Если сайт публикуется в GitHub Pages из репозитория проекта, передайте путь репозитория при сборке:
+Это позволяет GitHub Pages корректно находить JS, CSS и файлы проекта независимо от имени репозитория.
 
-```bash
-VITE_BASE_PATH=/medical-navigator/ npm run build
-```
-
-После этого:
+Для публикации:
 
 ```bash
 npm run deploy
 ```
 
-Скрипт `deploy` использует пакет `gh-pages` и публикует папку `dist`.
+Скрипт `deploy` сначала собирает проект, затем публикует папку `dist` через `gh-pages`.
 
 ## Структура сайта
 
